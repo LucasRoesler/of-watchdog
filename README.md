@@ -128,7 +128,7 @@ See an example in the [Hugo blog post](https://www.openfaas.com/blog/serverless-
 
 Environmental variables:
 
-> Note: timeouts should be specified as Golang durations i.e. `1m` or `20s`. 
+> Note: timeouts should be specified as Golang durations i.e. `1m` or `20s`.
 
 | Option                      | Implemented  | Usage                         |
 |-----------------------------|--------------|-------------------------------|
@@ -148,6 +148,5 @@ Environmental variables:
 | `max_inflight`              | Yes          | Limit the maximum number of requests in flight |
 | `mode`                      | Yes          | The mode which of-watchdog operates in, Default `streaming` [see doc](#3-streaming-fork-modestreaming---default). Options are [http](#1-http-modehttp), [serialising fork](#2-serializing-fork-modeserializing), [streaming fork](#3-streaming-fork-modestreaming---default), [static](#4-static-modestatic) |
 | `prefix_logs`             | Yes          | When set to `true` the watchdog will add a prefix of "Date Time" + "stderr/stdout" to every line read from the function process. Default `true` |
-
 
 > Note: the .lock file is implemented for health-checking, but cannot be disabled yet. You must create this file in /tmp/.

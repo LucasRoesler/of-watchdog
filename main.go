@@ -23,6 +23,8 @@ import (
 	"github.com/openfaas/of-watchdog/config"
 	"github.com/openfaas/of-watchdog/executor"
 	"github.com/openfaas/of-watchdog/metrics"
+
+	nrt "github.com/ripienaar/nats-roundtripper"
 )
 
 var (
@@ -143,6 +145,21 @@ func listenUntilShutdown(shutdownTimeout time.Duration, s *http.Server, suppress
 		if err := s.ListenAndServe(); err != http.ErrServerClosed {
 			log.Printf("Error ListenAndServe: %v", err)
 			close(idleConnsClosed)
+		}
+	}()
+
+	go func() {
+		enableNATSClient, ok := os.LookupEnv("NATS_CLIENT")
+		if !ok || enableNATSClient != "true" {
+			return
+		}
+
+		functionName := os.Getenv("FAAS_NAME")
+
+		nats := nrt.Must()
+		err := nats.ListenAndServ(context.Background(), fmt.Sprintf("faas.%s", functionName), s.Handler)
+		if err != http.ErrServerClosed {
+			log.Printf("Error ListenAndServe: %v", err)
 		}
 	}()
 
